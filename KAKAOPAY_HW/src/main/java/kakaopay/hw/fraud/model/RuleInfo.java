@@ -1,5 +1,7 @@
 package kakaopay.hw.fraud.model;
 
+
+
 /**
  * 룰 정보 저장. RuleInfo 데이터가 모여 룰셋이 된다.
  * 계좌 개설 여부에 따라 엔진에서의 처리에 차이가 있다. (이벤트 시작 시간 설정의 차이)
@@ -13,25 +15,25 @@ package kakaopay.hw.fraud.model;
  */
 public class RuleInfo {
 
+	private String ruleName;			// 룰 이름
+
 	private boolean opening;			// 계좌 개설 여부
 	private EventType eventType;		// 송금, 충전, 받기
 	private long limitPrice;				// 제한금액
 	private boolean checkBalance;	// 잔액 확인 여부
+	private long lastBalance;			// 마지막 잔액
 
-	private TimeUnit timeUnit;				// 시간 단위 - 시간, 일, 월 등
-	private int timeValue;					// timeUnit 단위의 실제 값
-	private int limitTimes;					// 제한 횟수 or 회수
+	private TimeUnit timeUnit;			// 시간 단위 - 시간, 일, 월 등
+	private int timeValue;				// timeUnit 단위의 실제 값
+	private int limitTimes;				// 제한 횟수 or 회수
 
 	public RuleInfo() {}
 
-	public RuleInfo(boolean opening, EventType eventType, long limitPrice, boolean checkBalance, TimeUnit timeUnit, int timeValue, int limitTimes) {
-		this.opening = opening;
-		this.eventType = eventType;
-		this.limitPrice = limitPrice;
-		this.checkBalance = checkBalance;
-		this.timeUnit = timeUnit;
-		this.timeValue = timeValue;
-		this.limitTimes = limitTimes;
+	public String getRuleName() {
+		return ruleName;
+	}
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
 	}
 
 	public boolean isOpening() {
@@ -60,6 +62,13 @@ public class RuleInfo {
 	}
 	public void setCheckBalance(boolean checkBalance) {
 		this.checkBalance = checkBalance;
+	}
+
+	public long getLastBalance() {
+		return lastBalance;
+	}
+	public void setLastBalance(long lastBalance) {
+		this.lastBalance = lastBalance;
 	}
 
 	public TimeUnit getTimeUnit() {

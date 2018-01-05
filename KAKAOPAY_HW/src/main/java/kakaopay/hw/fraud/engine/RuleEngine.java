@@ -2,7 +2,6 @@ package kakaopay.hw.fraud.engine;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -14,19 +13,26 @@ import kakaopay.hw.fraud.model.TimeUnit;
 
 public class RuleEngine {
 
-	private List<RuleInfo> ruleList = new ArrayList<>();
-	private List<EventInfo> eventList = new ArrayList<>();
+	private List<RuleInfo> ruleList = null;
+	private List<EventInfo> eventList = null;
+
+	public RuleEngine(List<RuleInfo> list) {
+		this.ruleList = list;
+	}
 
 	// 룰셋을 만든다
 
-	// before - 데이터 수신하여 정리한다
-
-	// 엔진 - 룰에 맞는지 확인한다
-	public void process() {
-
+	public void addRule(RuleInfo ruleInfo) {
+		this.addRule(ruleInfo);
 	}
 
-	public void execute(RuleInfo rule) {
+	// before - 데이터 수신하여 정리한다
+
+	public void process(List<EventInfo> eventList) {
+		this.eventList = eventList;
+	}
+
+	public Optional<String> execute(RuleInfo rule) {
 		// 룰 정보
 		boolean isOpening = rule.isOpening();
 		EventType eventType = rule.getEventType();
@@ -35,9 +41,20 @@ public class RuleEngine {
 		int timeValue = rule.getTimeValue();
 		int limitTimes = rule.getLimitTimes();
 		boolean checkBalance = rule.isCheckBalance();
+		long lastBalance = rule.getLastBalance();
 
 		LocalDateTime startDate = null;	// 룰 확인 시작 시간
 		int eventCount = 0;		// 룰에 맞는 이벤트 발생 회수
+
+		boolean resultBalance = false;
+		boolean resultLimitTimes = false;
+		boolean resultEventType = false;
+		if(!checkBalance) {
+			resultBalance = true;
+		}
+		if(limitTimes == 0) {
+			resultLimitTimes = true;
+		}
 
 		// 룰 - 계좌계설이 true -> 계좌개설 이벤트 정보를 확인한다
 		Optional<EventInfo> openingEvent = null;
@@ -51,46 +68,47 @@ public class RuleEngine {
 
 		// 회수와 제한기간
 		LocalDateTime dateTime = null;
-		long lastBalance = 0;	// 마지막 잔액
 		for(EventInfo event : this.eventList) {
 			// 1. 이벤트 타입이 맞는지 확인
-			if(event.getEventType() != eventType) {
-				continue;
+			if(event.getEventType() == eventType && event.getPrice() >= limitPrice) {
+				resultEventType = true;
+				eventCount++;	// 회수 counting
 			}
 
-			// 잔액 확인 안하고, 이벤트 금액 확인
-			if(!checkBalance && (event.getPrice() >= limitPrice)) {
-				continue;
+			if(checkBalance && 
+					// 여기서 예외로 칠 이벤트 타입도 정할 수 있게 하던가..
+					( event.getEventType() != EventType.OPENING && event.getEventType() != EventType.CHARGE ) && 
+						( event.getBalance() <= lastBalance )) {
+				System.out.println("EVENT Balance :: " + event.getBalance() + " || last balance :: " + lastBalance);
+				resultBalance = true;
 			}
-			
+
 			// 계좌 개설이 포함되지 않은 룰에서 시작 시간을 확인하는 경우
 			if(!isOpening && eventCount == 0) {
 				startDate = LocalDateTime.ofInstant(event.getEventDate().toInstant(), ZoneId.systemDefault());
 			}
 
-			eventCount++;	// 회수 counting
-
-			// 제한시간 계산 - 넘어가면 break가 아님 - 또 이 부분에서 버그 발생할 듯
-			// 이벤트 회수가 넘어가면 break 해야 함 - 룰 설정을 잘 해야 한다는 숙제가 있음
-			dateTime = LocalDateTime.ofInstant(event.getEventDate().toInstant(), ZoneId.systemDefault());
-			if((eventCount >= limitTimes) && this.checklimittime(startDate, dateTime, timeUnit, timeValue)) {
-				lastBalance = event.getBalance();
-				break;
+			if((limitTimes != 0) && eventCount >= limitTimes) {
+				resultLimitTimes = true;
 			}
-		}
-		
-		// 잔액 확인이 필요한 경우
-		// 잔액이 제한금액 보다 작은 경우
-		if(checkBalance && (lastBalance <= limitPrice)) {
-			
-		}
-		
-		// 제한회수 확인
-		if(limitTimes >= eventCount) {
-			
+
+			dateTime = LocalDateTime.ofInstant(event.getEventDate().toInstant(), ZoneId.systemDefault());
+			if(this.checklimittime(startDate, dateTime, timeUnit, timeValue)) {
+				if(resultBalance && resultEventType && resultLimitTimes) {
+					break;
+				}
+			}
+
 		}
 
 		// 마지막 처리
+		Optional<String> ruleName = null;
+		if(resultBalance && resultEventType && resultLimitTimes) {
+			ruleName = Optional.of(rule.getRuleName());
+		} else {
+			ruleName = Optional.empty();
+		}
+		return ruleName; // 룰 이름 반환
 	}
 
 	// after - 결과를 만든다
