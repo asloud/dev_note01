@@ -185,8 +185,9 @@ public class EngineTest01 {
 	@Test
 	public void test() {
 
-		RuleEngine ruleEngine = new RuleEngine( this.ruleList );
-		ruleEngine.process( this.eventList );
+		RuleEngine ruleEngine = new RuleEngine();
+		ruleEngine.setRuleList( ruleList );
+		ruleEngine.process(  1001, this.eventList );
 //		Optional<String> result = ruleEngine.execute( this.ruleList.get(0) );
 //		Optional<String> result = ruleEngine.execute( this.ruleList.get(1) );
 		Optional<String> result = ruleEngine.execute( this.ruleList.get(2) );

@@ -15,17 +15,17 @@ package kakaopay.hw.fraud.model;
  */
 public class RuleInfo {
 
-	private String ruleName;			// 룰 이름
+	private String ruleName;				// 룰 이름
 
-	private boolean opening;			// 계좌 개설 여부
+	private boolean opening = false;	// 계좌 개설 여부
 	private EventType eventType;		// 송금, 충전, 받기
-	private long limitPrice;				// 제한금액
-	private boolean checkBalance;	// 잔액 확인 여부
-	private long lastBalance;			// 마지막 잔액
+	private long limitPrice = 0;		// 제한금액
+	private boolean checkBalance = false;	// 잔액 확인 여부
+	private long lastBalance = 0;			// 마지막 잔액
 
 	private TimeUnit timeUnit;			// 시간 단위 - 시간, 일, 월 등
 	private int timeValue;				// timeUnit 단위의 실제 값
-	private int limitTimes;				// 제한 횟수 or 회수
+	private int limitTimes = 0;			// 제한 횟수 or 회수
 
 	public RuleInfo() {}
 
@@ -92,4 +92,10 @@ public class RuleInfo {
 		this.limitTimes = limitTimes;
 	}
 
+	@Override
+	public String toString() {
+		return "RuleInfo [ruleName=" + ruleName + ", opening=" + opening + ", eventType=" + eventType + ", limitPrice="
+				+ limitPrice + ", checkBalance=" + checkBalance + ", lastBalance=" + lastBalance + ", timeUnit="
+				+ timeUnit + ", timeValue=" + timeValue + ", limitTimes=" + limitTimes + "]";
+	}
 }

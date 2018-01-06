@@ -1,0 +1,3 @@
+{"ruleName":"ruleA","opening":true,"eventType":"CHARGE","limitPrice":200000,"checkBalance":true,"lastBalance":1000,"timeUnit":"HOUR","timeValue":1,"limitTimes":0}
+{"ruleName":"ruleB","opening":true,"eventType":"RECEIVED","limitPrice":100000,"checkBalance":false,"lastBalance":0,"timeUnit":"DAY","timeValue":7,"limitTimes":5}
+{"ruleName":"ruleC","opening":false,"eventType":"RECEIVED","limitPrice":50000,"checkBalance":false,"lastBalance":0,"timeUnit":"HOUR","timeValue":2,"limitTimes":3}

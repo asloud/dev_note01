@@ -1,0 +1,1 @@
+{"ruleName":"ruleA","opening":true,"eventType":"CHARGE","limitPrice":200000,"checkBalance":true,"lastBalance":1000,"timeUnit":"HOUR","timeValue":1,"limitTimes":0}

@@ -2,36 +2,80 @@ package kakaopay.hw.fraud.engine;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Component;
+
 import kakaopay.hw.fraud.model.EventInfo;
 import kakaopay.hw.fraud.model.EventType;
+import kakaopay.hw.fraud.model.ResultInfo;
 import kakaopay.hw.fraud.model.RuleInfo;
 import kakaopay.hw.fraud.model.TimeUnit;
 
+/**
+ * 룰 엔진 클래스
+ * @author insoo
+ *
+ */
+@Component
 public class RuleEngine {
 
-	private List<RuleInfo> ruleList = null;
-	private List<EventInfo> eventList = null;
+	private List<RuleInfo> ruleList = null;		// 룰 정보 저장
+	private List<EventInfo> eventList = null;	// 이벤트 목록 저장
 
-	public RuleEngine(List<RuleInfo> list) {
-		this.ruleList = list;
+	// 생성자
+	public RuleEngine() {}
+
+	/**
+	 * 룰 정보 목록 설정
+	 * @param ruleList 룰 정보 목록
+	 */
+	public void setRuleList(List<RuleInfo> ruleList) {
+		this.ruleList = ruleList;
 	}
 
-	// 룰셋을 만든다
-
-	public void addRule(RuleInfo ruleInfo) {
-		this.addRule(ruleInfo);
-	}
-
-	// before - 데이터 수신하여 정리한다
-
-	public void process(List<EventInfo> eventList) {
+	/**
+	 * 룰 엔진 처리 메소드. 엔진의 전체적인 동작 수행.
+	 * 룰이 있는지 확인 후 룰 하나씩 이벤트 목록 처리한다.
+	 * 결과 정리 후 반환
+	 * @param eventList 룰 엔진 처리 대상 이벤트 목록
+	 * @return 결과
+	 */
+	public Optional<ResultInfo> process(long userId, List<EventInfo> eventList) {
 		this.eventList = eventList;
+		Optional<ResultInfo> resultOptional = null;
+		List<String> ruleNames = new ArrayList<>();
+
+		// 혹시나 룰이 없으면 - 처리하지 않음
+		if(this.ruleList ==null || this.ruleList.isEmpty()) {
+			return Optional.empty();
+		}
+
+		Optional<String> ruleName = null;
+		// 룰 하나씩 처리
+		for(RuleInfo ruleInfo : this.ruleList) {
+			ruleName = this.execute(ruleInfo);
+			if(ruleName.isPresent()) {
+				ruleNames.add(ruleName.get());
+			}
+		}
+
+		// 결과 데이터 생성
+		ResultInfo resultInfo = new ResultInfo(userId, ruleNames);
+		resultOptional = Optional.of(resultInfo);
+
+		this.eventList.clear();
+		return resultOptional;
 	}
 
+	/**
+	 * 룰 하나에 대한 이벤트 데이터를 처리
+	 * @param rule 확인 대상 룰 정보
+	 * @return 이벤트의 룰 확인 결과
+	 */
 	public Optional<String> execute(RuleInfo rule) {
 		// 룰 정보
 		boolean isOpening = rule.isOpening();
@@ -64,8 +108,6 @@ public class RuleEngine {
 			startDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 		}
 
-		// 계좌개설이 없다면 시작 시간 확인하는 방법 별도로 있어야 함
-
 		// 회수와 제한기간
 		LocalDateTime dateTime = null;
 		for(EventInfo event : this.eventList) {
@@ -78,7 +120,7 @@ public class RuleEngine {
 			if(checkBalance && 
 					// 여기서 예외로 칠 이벤트 타입도 정할 수 있게 하던가..
 					( event.getEventType() != EventType.OPENING && event.getEventType() != EventType.CHARGE ) && 
-						( event.getBalance() <= lastBalance )) {
+					( event.getBalance() <= lastBalance )) {
 				System.out.println("EVENT Balance :: " + event.getBalance() + " || last balance :: " + lastBalance);
 				resultBalance = true;
 			}
@@ -93,7 +135,7 @@ public class RuleEngine {
 			}
 
 			dateTime = LocalDateTime.ofInstant(event.getEventDate().toInstant(), ZoneId.systemDefault());
-			if(this.checklimittime(startDate, dateTime, timeUnit, timeValue)) {
+			if(this.checkLimitTime(startDate, dateTime, timeUnit, timeValue)) {
 				if(resultBalance && resultEventType && resultLimitTimes) {
 					break;
 				}
@@ -111,14 +153,15 @@ public class RuleEngine {
 		return ruleName; // 룰 이름 반환
 	}
 
-	// after - 결과를 만든다
-	public void after() {
-		// 이벤트 목록을 비운다
-		this.eventList.clear();
-	}
-
-	// true : 시간 over, false : 아직 더 남았음
-	boolean checklimittime(LocalDateTime startDate, LocalDateTime endDate, TimeUnit timeUnit, int timevalue) {
+	/**
+	 * 이벤트의 시간이 룰의 제한 시간을 지났는지 확인
+	 * @param startDate 시작 시간
+	 * @param endDate 마지막 시간
+	 * @param timeUnit 시간 단위
+	 * @param timevalue 시간 값
+	 * @return true : 시간 over, false : 아직 더 남았음
+	 */
+	boolean checkLimitTime(LocalDateTime startDate, LocalDateTime endDate, TimeUnit timeUnit, int timevalue) {
 		LocalDateTime resultDate = null;
 		switch(timeUnit) {
 		case HOUR:
