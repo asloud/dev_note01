@@ -32,6 +32,7 @@ public class String2JsonTest01 {
 		ruleA.setCheckBalance(true);	// 잔액 확인
 		ruleA.setLastBalance(1000);
 		ruleA.setLimitTimes(0);
+		ruleA.setContinousCheck(true);	// 이벤트 확인 이후에 특정 조건 만족을 확인하는지..
 
 		Gson gson = new Gson();
 		String jsonStr = gson.toJson(ruleA);
@@ -69,7 +70,7 @@ public class String2JsonTest01 {
 	public void testFileToObject() throws IOException {
 		Gson gson = new Gson();
 
-		BufferedReader in = new BufferedReader(new FileReader(new File("C:\\Users\\insoo\\source\\git\\KAKAOPAY_HW\\test01.json")));
+		BufferedReader in = new BufferedReader(new FileReader(new File("C:\\Users\\insoo\\source\\git\\KAKAOPAY_HW\\test01.txt")));
 		String line = in.readLine();
 		in.close();
 

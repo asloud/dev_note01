@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import kakaopay.hw.fraud.model.EventInfo;
 import kakaopay.hw.fraud.model.EventType;
+import kakaopay.hw.fraud.model.ResultInfo;
 import kakaopay.hw.fraud.model.RuleInfo;
 import kakaopay.hw.fraud.model.TimeUnit;
 
@@ -51,6 +53,7 @@ public class EngineTest01 {
 		ruleA.setCheckBalance(true);	// 잔액 확인
 		ruleA.setLastBalance(1000);
 		ruleA.setLimitTimes(0);
+		ruleA.setContinousCheck(true);
 
 		ruleList.add(ruleA);
 
@@ -122,25 +125,25 @@ public class EngineTest01 {
 		// EventInfo(Date eventDate, long userId, String userAccountInfo, EventType eventType, long balance, 
 		//					String kakaoAccount, long otherUserId, long price, String bankAccountInfo) {
 		LocalDateTime time1 = LocalDateTime.of(2017, 12, 4, 12, 30);
-		EventInfo event1 = new EventInfo(Date.from(time1.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.OPENING, 0, "", 0, 0, "");
+		EventInfo event1 = new EventInfo(Date.from(time1.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.OPENING, 0, "", 0, 0, "");
 
 		LocalDateTime time2 = LocalDateTime.of(2017, 12, 5, 12, 30);
-		EventInfo event2 = new EventInfo(Date.from(time2.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 120000, "1002", 1002, 120000, "");
+		EventInfo event2 = new EventInfo(Date.from(time2.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.RECEIVED, 120000, "1002", 1002, 120000, "");
 
 		LocalDateTime time3 = LocalDateTime.of(2017, 12, 6, 12, 30);
-		EventInfo event3 = new EventInfo(Date.from(time3.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 230000, "1002", 1002, 110000, "");
+		EventInfo event3 = new EventInfo(Date.from(time3.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.RECEIVED, 230000, "1002", 1002, 110000, "");
 
 		LocalDateTime time4 = LocalDateTime.of(2017, 12, 7, 12, 30);
-		EventInfo event4 = new EventInfo(Date.from(time4.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 330000, "1003", 1003, 100000, "");
+		EventInfo event4 = new EventInfo(Date.from(time4.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.RECEIVED, 330000, "1003", 1003, 100000, "");
 
 		LocalDateTime time5 = LocalDateTime.of(2017, 12, 8, 12, 30);
-		EventInfo event5 = new EventInfo(Date.from(time5.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.SEND, 230000, "1002", 1002, 100000, "");
+		EventInfo event5 = new EventInfo(Date.from(time5.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.SEND, 230000, "1002", 1002, 100000, "");
 
 		LocalDateTime time6 = LocalDateTime.of(2017, 12, 8, 17, 30);
-		EventInfo event6 = new EventInfo(Date.from(time6.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 330000, "1003", 1003, 100000, "");
+		EventInfo event6 = new EventInfo(Date.from(time6.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.RECEIVED, 330000, "1003", 1003, 100000, "");
 
 		LocalDateTime time7 = LocalDateTime.of(2017, 12, 9, 12, 30);
-		EventInfo event7 = new EventInfo(Date.from(time7.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 430000, "1002", 1002, 100000, "");
+		EventInfo event7 = new EventInfo(Date.from(time7.atZone(ZoneId.systemDefault()).toInstant()), 1002, "1002", EventType.RECEIVED, 430000, "1002", 1002, 100000, "");
 
 		eventList.add(event1);
 		eventList.add(event2);
@@ -158,16 +161,16 @@ public class EngineTest01 {
 		//					String kakaoAccount, long otherUserId, long price, String bankAccountInfo) {
 		List<EventInfo> eventList = new ArrayList<>();
 
-		LocalDateTime time1 = LocalDateTime.of(2017, 12, 4, 12, 30);
+		LocalDateTime time1 = LocalDateTime.of(2017, 12, 4, 11, 20);
 		EventInfo event1 = new EventInfo(Date.from(time1.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 52000, "1002", 1002, 51000, "");
 
-		LocalDateTime time2 = LocalDateTime.of(2017, 12, 4, 12, 30);
+		LocalDateTime time2 = LocalDateTime.of(2017, 12, 4, 11, 30);
 		EventInfo event2 = new EventInfo(Date.from(time2.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 102000, "1002", 1002, 50000, "");
 
-		LocalDateTime time3 = LocalDateTime.of(2017, 12, 4, 12, 30);
+		LocalDateTime time3 = LocalDateTime.of(2017, 12, 4, 11, 50);
 		EventInfo event3 = new EventInfo(Date.from(time3.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 151000, "1003", 1003, 49000, "");
 
-		LocalDateTime time4 = LocalDateTime.of(2017, 12, 4, 12, 30);
+		LocalDateTime time4 = LocalDateTime.of(2017, 12, 4, 12, 20);
 		EventInfo event4 = new EventInfo(Date.from(time4.atZone(ZoneId.systemDefault()).toInstant()), 1001, "1001", EventType.RECEIVED, 202000, "1004", 1004, 51000, "");
 
 		LocalDateTime time5 = LocalDateTime.of(2017, 12, 4, 12, 30);
@@ -187,12 +190,17 @@ public class EngineTest01 {
 
 		RuleEngine ruleEngine = new RuleEngine();
 		ruleEngine.setRuleList( ruleList );
-		ruleEngine.process(  1001, this.eventList );
-//		Optional<String> result = ruleEngine.execute( this.ruleList.get(0) );
-//		Optional<String> result = ruleEngine.execute( this.ruleList.get(1) );
-		Optional<String> result = ruleEngine.execute( this.ruleList.get(2) );
+		System.out.println(this.eventList.size());
 
-		System.out.println(result);
+		final long userA_id = 1001;
+		List<EventInfo> listA = this.eventList.stream().filter(event -> event.getUserId() == userA_id).collect(Collectors.toList());
+		Optional<ResultInfo> resultA = ruleEngine.process(  1002, listA );
+		System.out.println(resultA);
+
+		final long userB_id = 1002;
+		List<EventInfo> listB = this.eventList.stream().filter(event -> event.getUserId() == userB_id).collect(Collectors.toList());
+		Optional<ResultInfo> resultB = ruleEngine.process(userB_id, listB);
+		System.out.println(resultB);
 	}
 
 }

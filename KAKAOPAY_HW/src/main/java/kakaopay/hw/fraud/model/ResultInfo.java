@@ -43,4 +43,9 @@ public class ResultInfo {
 	public String getRule() {
 		return rule;
 	}
+
+	@Override
+	public String toString() {
+		return "ResultInfo [user_id=" + user_id + ", is_fraud=" + is_fraud + ", rule=" + rule + "]";
+	}
 }

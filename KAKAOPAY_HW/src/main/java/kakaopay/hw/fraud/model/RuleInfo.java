@@ -27,6 +27,8 @@ public class RuleInfo {
 	private int timeValue;				// timeUnit 단위의 실제 값
 	private int limitTimes = 0;			// 제한 횟수 or 회수
 
+	private boolean continousCheck = false; // 이벤트 타입 확인 이후에 특정 조건을 만족하는지 확인
+
 	public RuleInfo() {}
 
 	public String getRuleName() {
@@ -92,10 +94,19 @@ public class RuleInfo {
 		this.limitTimes = limitTimes;
 	}
 
+	public boolean isContinousCheck() {
+		return continousCheck;
+	}
+	public void setContinousCheck(boolean continousCheck) {
+		this.continousCheck = continousCheck;
+	}
+
 	@Override
 	public String toString() {
 		return "RuleInfo [ruleName=" + ruleName + ", opening=" + opening + ", eventType=" + eventType + ", limitPrice="
 				+ limitPrice + ", checkBalance=" + checkBalance + ", lastBalance=" + lastBalance + ", timeUnit="
-				+ timeUnit + ", timeValue=" + timeValue + ", limitTimes=" + limitTimes + "]";
+				+ timeUnit + ", timeValue=" + timeValue + ", limitTimes=" + limitTimes + ", continousCheck="
+				+ continousCheck + "]";
 	}
+
 }

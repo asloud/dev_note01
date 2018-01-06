@@ -1,0 +1,17 @@
+{"eventDate":"2017-12-31 12:12:00","userId":1001,"userAccountInfo":"1001","eventType":"OPENING","balance":0,"kakaoAccount":"","otherUserId":-1,"price":0,"bankAccountInfo":""}
+{"eventDate":"2017-12-31 12:15:00","userId":1001,"userAccountInfo":"1001","eventType":"CHARGE","balance":200000,"kakaoAccount":"","otherUserId":0,"price":200000,"bankAccountInfo":""}
+{"eventDate":"2017-12-31 12:22:00","userId":1001,"userAccountInfo":"1001","eventType":"SEND","balance":100000,"kakaoAccount":"1002","otherUserId":1002,"price":100000,"bankAccountInfo":""}
+{"eventDate":"2017-12-31 12:34:00","userId":1001,"userAccountInfo":"1001","eventType":"SEND","balance":10000,"kakaoAccount":"1003","otherUserId":1003,"price":90000,"bankAccountInfo":""}
+{"eventDate":"2017-12-31 12:54:00","userId":1001,"userAccountInfo":"1001","eventType":"SEND","balance":500,"kakaoAccount":"1002","otherUserId":1002,"price":9500,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"OPENING","balance":0,"kakaoAccount":"","otherUserId":0,"price":0,"bankAccountInfo":""}
+{"eventDate":"2017-12-05 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"RECEIVED","balance":120000,"kakaoAccount":"1002","otherUserId":1002,"price":120000,"bankAccountInfo":""}
+{"eventDate":"2017-12-06 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"RECEIVED","balance":230000,"kakaoAccount":"1002","otherUserId":1002,"price":110000,"bankAccountInfo":""}
+{"eventDate":"2017-12-07 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"RECEIVED","balance":330000,"kakaoAccount":"1003","otherUserId":1003,"price":100000,"bankAccountInfo":""}
+{"eventDate":"2017-12-08 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"SEND","balance":230000,"kakaoAccount":"1002","otherUserId":1002,"price":100000,"bankAccountInfo":""}
+{"eventDate":"2017-12-08 17:30:00","userId":1002,"userAccountInfo":"1002","eventType":"RECEIVED","balance":330000,"kakaoAccount":"1003","otherUserId":1003,"price":100000,"bankAccountInfo":""}
+{"eventDate":"2017-12-09 12:30:00","userId":1002,"userAccountInfo":"1002","eventType":"RECEIVED","balance":430000,"kakaoAccount":"1002","otherUserId":1002,"price":100000,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 11:20:00","userId":1001,"userAccountInfo":"1001","eventType":"RECEIVED","balance":52000,"kakaoAccount":"1002","otherUserId":1002,"price":51000,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 11:30:00","userId":1001,"userAccountInfo":"1001","eventType":"RECEIVED","balance":102000,"kakaoAccount":"1002","otherUserId":1002,"price":50000,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 11:50:00","userId":1001,"userAccountInfo":"1001","eventType":"RECEIVED","balance":151000,"kakaoAccount":"1003","otherUserId":1003,"price":49000,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 12:20:00","userId":1001,"userAccountInfo":"1001","eventType":"RECEIVED","balance":202000,"kakaoAccount":"1004","otherUserId":1004,"price":51000,"bankAccountInfo":""}
+{"eventDate":"2017-12-04 12:30:00","userId":1001,"userAccountInfo":"1001","eventType":"RECEIVED","balance":253000,"kakaoAccount":"1002","otherUserId":1002,"price":51000,"bankAccountInfo":""}

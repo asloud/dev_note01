@@ -99,12 +99,19 @@ public class RuleEngine {
 		if(limitTimes == 0) {
 			resultLimitTimes = true;
 		}
-
+		
 		// 룰 - 계좌계설이 true -> 계좌개설 이벤트 정보를 확인한다
 		Optional<EventInfo> openingEvent = null;
 		if(isOpening) {
 			openingEvent = eventList.stream().filter(event -> event.getEventType() == EventType.OPENING).findAny();
-			Date date = openingEvent.get().getEventDate();
+			Date date = null;
+			if(openingEvent.isPresent()) {
+				date = openingEvent.get().getEventDate();
+			} else {
+				// 룰은 계좌개설인데, 데이터가 계좌개설이 아닌 경우
+				openingEvent = eventList.stream().findFirst();
+				date = openingEvent.get().getEventDate();
+			}
 			startDate = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
 		}
 
@@ -115,18 +122,19 @@ public class RuleEngine {
 			if(event.getEventType() == eventType && event.getPrice() >= limitPrice) {
 				resultEventType = true;
 				eventCount++;	// 회수 counting
+			} else if(!rule.isContinousCheck()) {
+				continue;
 			}
 
 			if(checkBalance && 
 					// 여기서 예외로 칠 이벤트 타입도 정할 수 있게 하던가..
 					( event.getEventType() != EventType.OPENING && event.getEventType() != EventType.CHARGE ) && 
 					( event.getBalance() <= lastBalance )) {
-				System.out.println("EVENT Balance :: " + event.getBalance() + " || last balance :: " + lastBalance);
 				resultBalance = true;
 			}
 
 			// 계좌 개설이 포함되지 않은 룰에서 시작 시간을 확인하는 경우
-			if(!isOpening && eventCount == 0) {
+			if(!isOpening && eventCount == 1) {
 				startDate = LocalDateTime.ofInstant(event.getEventDate().toInstant(), ZoneId.systemDefault());
 			}
 
@@ -174,6 +182,8 @@ public class RuleEngine {
 			resultDate = endDate.minusMonths(timevalue);
 			break;
 		}
+
+//		System.out.println("START DATE : " + startDate + ", endDate : " + endDate);
 
 		return resultDate.isBefore(startDate);
 	}
