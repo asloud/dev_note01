@@ -26,9 +26,10 @@ public class ResultInfo {
 		this.user_id = user_id;
 		if(ruleNames != null && !ruleNames.isEmpty()) {
 			this.rule = ruleNames.stream().map(e -> e.toString()).collect(Collectors.joining(","));
-		}
-		if(ruleNames != null && !ruleNames.isEmpty()) {
 			this.is_fraud = true;
+		} else {
+			this.is_fraud = false;
+			this.rule = "";
 		}
 	}
 
