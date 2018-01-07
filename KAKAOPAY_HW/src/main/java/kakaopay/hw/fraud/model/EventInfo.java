@@ -12,13 +12,13 @@ public class EventInfo {
 	// 기본 정보
 	private Date eventDate;			// 이벤트 발생 시간
 	private long userId;				// 이벤트 발생 사용자 ID
-	private String userAccountInfo;		// 계좌번호
+	private String userAccountInfo;	// 계좌번호
 	private EventType eventType;		// 발생한 이벤트 종류
 
-	// 송금, 충전, 받기 정보
+	// 송금, 충전, 받기 정보 - 최대한 공통화
 	private long balance;				// 송금, 받기 전 계좌의 잔액
 	private String kakaoAccount;		// 송금, 받기의 카카오머니 계좌
-	private long otherUserId;				// 송금, 받기 카카오머니 사용자 ID
+	private long otherUserId;			// 송금, 받기 카카오머니 사용자 ID
 	private long price;					// 송금, 충전, 받기의 금액
 
 	private String bankAccountInfo;	// 타행 계좌번호
@@ -101,6 +101,7 @@ public class EventInfo {
 		this.bankAccountInfo = bankAccountInfo;
 	}
 
+	// 테스트에서 데이터 확인용
 	@Override
 	public String toString() {
 		return "EventInfo [eventDate=" + eventDate + ", userId=" + userId + ", userAccountInfo=" + userAccountInfo

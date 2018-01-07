@@ -27,7 +27,8 @@ public class RestAPIController {
 	private RuleEngineService ruleEngineService;
 
 	/**
-	 * 시작 페이지
+	 * 시작 페이지.
+	 * JSP 페이지에서 더미 이벤트 데이터의 사용자ID 목록을 보여준다
 	 * @param request
 	 * @param map
 	 * @return
@@ -42,7 +43,8 @@ public class RestAPIController {
 	}
 
 	/**
-	 * 룰 확인 API
+	 * 룰 확인 API.
+	 * 요청으로 사용자ID를 전달 받으면, 더미 이벤트 데이터에서 이상 거래 여부를 확인하여 응답을 만들어 전달한다. 
 	 * @param request
 	 * @param user_id
 	 * @return

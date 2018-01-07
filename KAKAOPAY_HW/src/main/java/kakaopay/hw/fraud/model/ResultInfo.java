@@ -24,10 +24,10 @@ public class ResultInfo {
 
 	public ResultInfo(long user_id, List<String> ruleNames) {
 		this.user_id = user_id;
-		if(ruleNames != null && !ruleNames.isEmpty()) {
+		if(ruleNames != null && !ruleNames.isEmpty()) {	// 룰 이름이 있는 경우
 			this.rule = ruleNames.stream().map(e -> e.toString()).collect(Collectors.joining(","));
 			this.is_fraud = true;
-		} else {
+		} else {	// 룰 이름이 없는 경우
 			this.is_fraud = false;
 			this.rule = "";
 		}
@@ -45,6 +45,7 @@ public class ResultInfo {
 		return rule;
 	}
 
+	// 테스트에서 데이터 확인용
 	@Override
 	public String toString() {
 		return "ResultInfo [user_id=" + user_id + ", is_fraud=" + is_fraud + ", rule=" + rule + "]";

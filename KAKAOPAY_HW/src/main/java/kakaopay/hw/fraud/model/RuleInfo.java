@@ -5,8 +5,9 @@ package kakaopay.hw.fraud.model;
 /**
  * 룰 정보 저장. RuleInfo 데이터가 모여 룰셋이 된다.
  * 계좌 개설 여부에 따라 엔진에서의 처리에 차이가 있다. (이벤트 시작 시간 설정의 차이)
- * 많은 생각 끝에 룰은 2가지의 종류가 있을 듯..
+ * 아마 다음 종류의 룰이 있을 것이라 생각....
  * 		1. 계좌 개설 -> 충전/받기 || 송금/지불 -> 특정 기간 내 특정 행위 N회 이상 || 잔액 N원 이하
+ * 			- 특정 이벤트 발생 이후에 조건을 만족해야 하는 이벤트 
  * 		2. 기존 계좌 있음 -> 일정 시간 내 충전/받기/지불/송금 N회 이상 || 잔액 N원 이하
  * 계산이 복잡할 것 같아 비교는 이상/이하로 통일
  * 추후 JSON 데이터를 RuleInfo 객체로 변환하는 기능 추가 -> Rest API로 룰 추가 가능, (설정 파일로 설정도 물론 가능)
@@ -18,8 +19,8 @@ public class RuleInfo {
 	private String ruleName;				// 룰 이름
 
 	private boolean opening = false;	// 계좌 개설 여부
-	private EventType eventType;		// 송금, 충전, 받기
-	private long limitPrice = 0;		// 제한금액
+	private EventType eventType;			// 송금, 충전, 받기
+	private long limitPrice = 0;			// 제한금액
 	private boolean checkBalance = false;	// 잔액 확인 여부
 	private long lastBalance = 0;			// 마지막 잔액
 
@@ -101,6 +102,7 @@ public class RuleInfo {
 		this.continousCheck = continousCheck;
 	}
 
+	// 테스트에서 데이터 확인용
 	@Override
 	public String toString() {
 		return "RuleInfo [ruleName=" + ruleName + ", opening=" + opening + ", eventType=" + eventType + ", limitPrice="
