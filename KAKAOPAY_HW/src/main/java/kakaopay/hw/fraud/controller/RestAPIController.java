@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -26,6 +28,8 @@ public class RestAPIController {
 	@Autowired
 	private RuleEngineService ruleEngineService;
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	/**
 	 * 시작 페이지.
 	 * JSP 페이지에서 더미 이벤트 데이터의 사용자ID 목록을 보여준다
@@ -35,8 +39,10 @@ public class RestAPIController {
 	 */
 	@RequestMapping("/")
 	public String initPaget(HttpServletRequest request, ModelMap map) {
+		logger.info("index.jsp");
 		List<Long> userIdList = this.ruleEngineService.getUserIdList();
 
+		logger.info("USERS : {}", userIdList);
 		map.addAttribute("userIdList", userIdList);
 
 		return "index";
@@ -52,8 +58,9 @@ public class RestAPIController {
 	@RequestMapping(value="/v1/fraud/{user_id}", method=RequestMethod.GET)
 	@ResponseBody
 	public ResultInfo checkFraud(HttpServletRequest request, @PathVariable long user_id) {
-
+		logger.info("/v1/fraud/{}", user_id);
 		ResultInfo resultInfo = this.ruleEngineService.checkService(user_id);
+		logger.info("Result : {}", resultInfo.toString());
 		return resultInfo;
 	}
 }

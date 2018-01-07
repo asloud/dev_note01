@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import kakaopay.hw.fraud.model.EventInfo;
@@ -27,6 +29,8 @@ public class RuleEngine {
 	private List<RuleInfo> ruleList = null;		// 룰 정보 저장
 	private List<EventInfo> eventList = null;	// 이벤트 목록 저장
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	// 생성자
 	public RuleEngine() {}
 
@@ -46,6 +50,7 @@ public class RuleEngine {
 	 * @return 결과
 	 */
 	public Optional<ResultInfo> process(long userId, List<EventInfo> eventList) {
+		logger.info("RuleEngine - USER ID : {}", userId);
 		this.eventList = eventList;
 		Optional<ResultInfo> resultOptional = null;	// 결과
 		List<String> ruleNames = new ArrayList<>();	// 필터링되는 룰 이름 저장

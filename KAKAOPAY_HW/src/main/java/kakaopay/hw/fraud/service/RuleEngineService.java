@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,8 @@ public class RuleEngineService {
 	@Autowired
 	private RuleEngine ruleEngine;	// 룰 엔진 클래스
 
+	private Logger logger = LoggerFactory.getLogger(getClass());
+
 	@PostConstruct
 	public void init() {
 		this.ruleEngine.setRuleList(this.ruleConfig.getRuleList());
@@ -38,6 +42,7 @@ public class RuleEngineService {
 	 * @return 룰 확인 결과
 	 */
 	public ResultInfo checkService(long userId) {
+		logger.info("checkService");
 		List<EventInfo> eventList = ruleConfig.getEventList(userId);
 		Optional<ResultInfo> resultOptional = this.ruleEngine.process(userId, eventList);
 		
@@ -51,6 +56,7 @@ public class RuleEngineService {
 	 * @return 더미 사용자ID 목록
 	 */
 	public List<Long> getUserIdList() {
+		logger.info("getUserIdList");
 		List<Long> userIdList = this.ruleConfig.getUserIdList();
 		return userIdList;
 	}
